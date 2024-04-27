@@ -245,8 +245,6 @@ local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sidhsksjs
 local wndw = lib:Window("VIP Turtle Hub V4")
 local T1 = wndw:Tab("Main")
 
-local Main = MainBOX:AddTab("Main")
-
 T1:Dropdown("Aim method",{"Raycast","FindPartOnRay","FindPartOnRayWithWhitelist","FindPartOnRayWithIgnoreList","Mouse.Hit/Target"},function(value)
     SilentAimSettings.SilentAimMethod = value
 end)
@@ -297,6 +295,12 @@ end)
 T3:Slider("Prediction amount",0.165,1,0.165,function(value)
     PredictionAmount = value
     SilentAimSettings.MouseHitPredictionAmount = value
+end)
+
+local T4 = wndw:Tab("Another")
+
+T4:Button("Tracking V1",function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Sidhsksjsjsh/Testing-Bullet-Track/main/V1.lua?token=GHSAT0AAAAAACRNPO6ZEOPK56HEIVUHKFKSZRNG7OQ"))()
 end)
 
 --[[local CreateConfigurationBOX = GeneralTab:AddRightTabbox("Create Configuration") do 
