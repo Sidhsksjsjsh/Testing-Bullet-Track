@@ -30,7 +30,6 @@ local SilentAimSettings = {
 }
 
 -- variables
-getgenv().SilentAimSettings = Settings
 local MainFileName = "UniversalSilentAim"
 local SelectedFile, FileToSave = "", ""
 
@@ -300,7 +299,7 @@ end)
 local T4 = wndw:Tab("Another")
 
 T4:Button("Tracking V1",function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Sidhsksjsjsh/Testing-Bullet-Track/main/V1.lua?token=GHSAT0AAAAAACRNPO6ZEOPK56HEIVUHKFKSZRNG7OQ"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Sidhsksjsjsh/Testing-Bullet-Track/main/V1.lua"))()
 end)
 
 --[[local CreateConfigurationBOX = GeneralTab:AddRightTabbox("Create Configuration") do 
