@@ -211,17 +211,17 @@ local function IsPlayerVisible(Player)
 end
 
 local function getClosestPlayer()
-    if not Options.TargetPart.Value then return end
+    if not SilentAimSettings.SilentAimMethod then return end
     local Closest
     local DistanceToMouse
     for _, Player in next, GetPlayers(Players) do
         if Player == LocalPlayer then continue end
-        if Toggles.TeamCheck.Value and Player.Team == LocalPlayer.Team then continue end
+        if SilentAimSettings.TeamCheck and Player.Team == LocalPlayer.Team then continue end
 
         local Character = Player.Character
         if not Character then continue end
         
-        if Toggles.VisibleCheck.Value and not IsPlayerVisible(Player) then continue end
+        if SilentAimSettings.VisibleCheck and not IsPlayerVisible(Player) then continue end
 
         local HumanoidRootPart = FindFirstChild(Character, "HumanoidRootPart")
         local Humanoid = FindFirstChild(Character, "Humanoid")
@@ -231,8 +231,8 @@ local function getClosestPlayer()
         if not OnScreen then continue end
 
         local Distance = (getMousePosition() - ScreenPosition).Magnitude
-        if Distance <= (DistanceToMouse or Options.Radius.Value or 2000) then
-            Closest = ((Options.TargetPart.Value == "Random" and Character[ValidTargetParts[math.random(1, #ValidTargetParts)]]) or Character[Options.TargetPart.Value])
+        if Distance <= (DistanceToMouse or SilentAimSettings.FOVRadius or 2000) then
+            Closest = ((SilentAimSettings.SilentAimMethod == "Random" and Character[ValidTargetParts[math.random(1, #ValidTargetParts)]]) or Character[SilentAimSettings.SilentAimMethod])
             DistanceToMouse = Distance
         end
     end
@@ -445,7 +445,7 @@ oldIndex = hookmetamethod(game, "__index", newcclosure(function(self, Index)
         if Index == "Target" or Index == "target" then 
             return HitPart
         elseif Index == "Hit" or Index == "hit" then 
-            return ((Toggles.Prediction.Value and (HitPart.CFrame + (HitPart.Velocity * PredictionAmount))) or (not Toggles.Prediction.Value and HitPart.CFrame))
+            return ((SilentAimSettings.MouseHitPredictionAmount and (HitPart.CFrame + (HitPart.Velocity * PredictionAmount))) or (not SilentAimSettings.MouseHitPredictionAmount and HitPart.CFrame))
         elseif Index == "X" or Index == "x" then 
             return self.X 
         elseif Index == "Y" or Index == "y" then 
