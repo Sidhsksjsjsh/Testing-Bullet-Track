@@ -115,7 +115,7 @@ function CalculateChance(Percentage)
 end
 
 
---[[file handling]] do 
+--[[file handling do 
     if not isfolder(MainFileName) then 
         makefolder(MainFileName);
     end
@@ -167,7 +167,7 @@ local function LoadFile(FileName)
         SilentAimSettings[Index] = Value
     end
 end
-
+]]
 local function getPositionOnScreen(Vector)
     local Vec3, OnScreen = WorldToScreen(Camera, Vector)
     return Vector2.new(Vec3.X, Vec3.Y), OnScreen
@@ -352,7 +352,7 @@ end]]
 
 resume(create(function()
     RenderStepped:Connect(function()
-        if Toggles.MousePosition.Value and Toggles.aim_Enabled.Value then
+        if SilentAimSettings.MouseHitPrediction == true and SilentAimSettings.Enabled == true then
             if getClosestPlayer() then 
                 local Root = getClosestPlayer().Parent.PrimaryPart or getClosestPlayer()
                 local RootToViewportPoint, IsOnScreen = WorldToViewportPoint(Camera, Root.Position);
@@ -366,9 +366,9 @@ resume(create(function()
             end
         end
         
-        if Toggles.Visible.Value then 
-            fov_circle.Visible = Toggles.Visible.Value
-            fov_circle.Color = Options.Color.Value
+        if SilentAimSettings.FOVVisible then 
+            fov_circle.Visible = SilentAimSettings.FOVVisible
+            --fov_circle.Color = Options.Color.Value
             fov_circle.Position = getMousePosition()
         end
     end)
@@ -381,8 +381,8 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
     local Arguments = {...}
     local self = Arguments[1]
     local chance = CalculateChance(SilentAimSettings.HitChance)
-    if Toggles.aim_Enabled.Value and self == workspace and not checkcaller() and chance == true then
-        if Method == "FindPartOnRayWithIgnoreList" and Options.Method.Value == Method then
+    if SilentAimSettings.Enabled == true and self == workspace and not checkcaller() and chance == true then
+        if Method == "FindPartOnRayWithIgnoreList" and SilentAimSettings.SilentAimMethod == Method then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithIgnoreList) then
                 local A_Ray = Arguments[2]
 
@@ -395,7 +395,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method then
+        elseif Method == "FindPartOnRayWithWhitelist" and SilentAimSettings.SilentAimMethod == Method then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithWhitelist) then
                 local A_Ray = Arguments[2]
 
@@ -408,7 +408,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and Options.Method.Value:lower() == Method:lower() then
+        elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and SilentAimSettings.SilentAimMethod:lower() == Method:lower() then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRay) then
                 local A_Ray = Arguments[2]
 
@@ -421,7 +421,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif Method == "Raycast" and Options.Method.Value == Method then
+        elseif Method == "Raycast" and SilentAimSettings.SilentAimMethod == Method then
             if ValidateArguments(Arguments, ExpectedArguments.Raycast) then
                 local A_Origin = Arguments[2]
 
@@ -439,7 +439,7 @@ end))
 
 local oldIndex = nil 
 oldIndex = hookmetamethod(game, "__index", newcclosure(function(self, Index)
-    if self == Mouse and not checkcaller() and Toggles.aim_Enabled.Value and Options.Method.Value == "Mouse.Hit/Target" and getClosestPlayer() then
+    if self == Mouse and not checkcaller() and SilentAimSettings.Enabled == true and SilentAimSettings.SilentAimMethod == "Mouse.Hit/Target" and getClosestPlayer() then
         local HitPart = getClosestPlayer()
          
         if Index == "Target" or Index == "target" then 
